@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My GitHub Pages Site</title>
+
+  <!-- Link to separated CSS file -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Optional: change base if publishing as a project page (see notes) -->
+  <!-- <base href="/REPO-NAME/"> -->
+</head>
+<body>
+  <header class="site-header">
+    <h1>Site Title</h1>
+    <p class="tagline">A short description.</p>
+  </header>
+
+  <main id="main">
+    <section class="card">
+      <h2>Example section</h2>
+      <p>This content is loaded from <code>index.html</code> and styled by <code>styles.css</code>.</p>
+      <button id="actionBtn">Click me</button>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <small>&copy; <span id="year"></span> My Project</small>
+  </footer>
+
+  <!-- Link to separated JS file (defer ensures it runs after parsing) -->
+  <script src="script.js" defer></script>
+</body>
+</html>

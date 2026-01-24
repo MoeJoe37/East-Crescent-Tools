@@ -1,0 +1,53 @@
+/* Basic layout and typographic baseline */
+:root{
+  --max-width: 900px;
+  --accent: #1e88e5;
+  --gap: 16px;
+  --radius: 10px;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+*{box-sizing:border-box}
+body{
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  margin:0;
+  padding:20px;
+  display:flex;
+  min-height:100vh;
+  align-items:flex-start;
+  justify-content:center;
+  background:#f6f7fb;
+  color:#222;
+}
+
+.container{max-width:var(--max-width); width:100%}
+
+/* Simple header/footer */
+.site-header{margin-bottom:var(--gap)}
+.site-header h1{margin:0; font-size:1.6rem}
+.tagline{margin:4px 0 0; color:#555}
+
+/* Card */
+.card{
+  background:#fff;
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:0 6px 18px rgba(20,30,40,0.06);
+  max-width:700px;
+}
+
+/* Footer */
+.site-footer{margin-top:24px; text-align:center; color:#666}
+
+/* Button */
+button{
+  background:var(--accent);
+  color:#fff;
+  border:0;
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+button:active{transform:translateY(1px)}
