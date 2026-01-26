@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة المردود</title>
-    <!-- Tailwind CSS for a professional, modern look -->
+    <title>East Crescent Tools - أدوات هلال شرق </title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Arabic Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: #0f172a; /* Deep slate background */
+            background-color: #0f172a;
             color: #f1f5f9;
         }
         .app-container {
@@ -19,7 +17,6 @@
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        /* Custom styles for inputs to ensure a clean look */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -28,85 +25,110 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+        .cake-input {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+        .nav-btn.active {
+            background-color: #4f46e5;
+            color: white;
+        }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex flex-col items-center p-4">
 
-    <div class="w-full max-w-lg app-container rounded-3xl shadow-2xl overflow-hidden animate-in fade-in duration-700">
-        <!-- Header Section -->
-        <div class="bg-gradient-to-br from-indigo-600 to-blue-700 p-8 text-center">
-            <h1 class="text-3xl font-extrabold text-white">حاسبة المردود</h1>
-            <p class="text-indigo-100 text-sm mt-2 opacity-80">نظام إدارة المرتجعات والهدايا</p>
+    <!-- Header / Branding -->
+    <div class="w-full max-w-lg mb-8 text-center mt-6">
+        <h1 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">East Crescent Tools</h1>
+        <p class="text-slate-400 mt-2">أدوات هلال شرقي للإدارة والعمليات</p>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="w-full max-w-lg flex gap-2 mb-6 bg-slate-800/50 p-1.5 rounded-2xl border border-slate-700">
+        <button onclick="switchTab('cakeTab')" id="btn-cakeTab" class="nav-btn active flex-1 py-3 rounded-xl font-bold transition-all text-sm">حاسبة الكيك</button>
+        <button onclick="switchTab('returnTab')" id="btn-returnTab" class="nav-btn flex-1 py-3 rounded-xl font-bold transition-all text-sm text-slate-400 hover:text-white">حاسبة المردود</button>
+    </div>
+
+    <!-- 1. Cake Converter Tool -->
+    <div id="cakeTab" class="tool-tab w-full max-w-lg app-container rounded-3xl shadow-2xl overflow-hidden">
+        <div class="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 text-center">
+            <h2 class="text-3xl font-extrabold text-white">حاسبة الكيك</h2>
+            <p class="text-blue-100 text-sm mt-2 opacity-80">تحويل العدد الإجمالي إلى طرود وكواتين</p>
         </div>
-
         <div class="p-8 space-y-6">
-            <!-- User Inputs -->
-            <div class="grid grid-cols-1 gap-5">
-                <div class="group">
-                    <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2 mr-1">عدد القطع المدفوعة</label>
-                    <input type="number" id="paidInput" placeholder="أدخل العدد هنا..." 
-                           class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-blue-400 uppercase tracking-wider mb-2">إجمالي عدد قطع الكيك:</label>
+                <input type="number" id="cakeInput" placeholder="أدخل العدد هنا (مثلاً 299)" 
+                       class="cake-input w-full p-4 rounded-xl border-none text-lg font-bold outline-none focus:ring-4 focus:ring-blue-500/30">
+            </div>
+            <button onclick="calculateCake()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-500/20">احسب التوزيع</button>
+            
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-700 text-center">
+                    <div id="cakePackageVal" class="text-2xl font-bold text-blue-400">0</div>
+                    <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">طرد (8 كرتونة)</div>
                 </div>
-                
-                <div class="group">
-                    <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2 mr-1">عدد الهدايا (مجانية)</label>
-                    <input type="number" id="giftInput" placeholder="أدخل العدد هنا..." 
-                           class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-700 text-center">
+                    <div id="cakeBoxVal" class="text-2xl font-bold text-blue-400">0</div>
+                    <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">كرتونة (12 قطعة)</div>
                 </div>
-
-                <div class="group">
-                    <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2 mr-1">كمية المردود (المرتجع)</label>
-                    <input type="number" id="returnQtyInput" placeholder="أدخل الكمية المرتجعة..." 
-                           class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all ring-1 ring-slate-800">
-                </div>
-
-                <div class="group">
-                    <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2 mr-1">سعر المنتج (للكارتونة)</label>
-                    <input type="number" step="any" id="priceInput" placeholder="أدخل السعر..." 
-                           class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all font-mono">
+                <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-700 text-center">
+                    <div id="cakePieceVal" class="text-2xl font-bold text-blue-400">0</div>
+                    <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">قطع متبقية</div>
                 </div>
             </div>
 
-            <!-- Buttons -->
-            <div class="flex flex-col sm:flex-row gap-3 pt-4">
-                <button onclick="calculate()" class="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl transition-all transform active:scale-95 shadow-lg shadow-indigo-500/20">
-                    احسب الآن
-                </button>
-                <button onclick="clearAll()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold py-4 rounded-xl transition-all active:scale-95">
-                    مسح
-                </button>
+            <div id="cakeDecimalContainer" class="bg-indigo-900/30 p-4 rounded-2xl border border-indigo-800/50 hidden">
+                <p class="text-center text-[10px] text-indigo-300 font-bold uppercase tracking-widest mb-1">إجمالي الطرود (عرض عشري)</p>
+                <p id="cakeDecimalVal" class="text-center text-xl font-mono font-bold text-indigo-400">0.0</p>
             </div>
-
-            <!-- Results Card -->
-            <div id="resultsArea" class="bg-black/30 rounded-2xl p-6 border border-slate-700/50 space-y-4">
-                <h3 class="text-sm font-bold text-slate-400 border-b border-slate-700/50 pb-2 flex items-center gap-2">
-                    <span class="w-1.5 h-4 bg-indigo-500 rounded-full"></span>
-                    النتائج التفصيلية
-                </h3>
-                
-                <div class="flex justify-between items-center group">
-                    <span class="text-slate-400 group-hover:text-slate-300 transition-colors">سعر المنتج الفعلي:</span>
-                    <span id="piecePriceLbl" class="text-xl font-mono text-white">-</span>
-                </div>
-                <div class="flex justify-between items-center group">
-                    <span class="text-slate-400 group-hover:text-slate-300 transition-colors">القطع المدفوعة في المردود:</span>
-                    <span id="paidInReturnLbl" class="text-xl font-mono text-emerald-400 font-bold">-</span>
-                </div>
-                <div class="flex justify-between items-center group">
-                    <span class="text-slate-400 group-hover:text-slate-300 transition-colors">القطع المجانية في المردود:</span>
-                    <span id="freeInReturnLbl" class="text-xl font-mono text-amber-500 font-bold">-</span>
-                </div>
-                <div class="flex justify-between items-center pt-2 border-t border-slate-700/50">
-                    <span class="text-slate-300 font-bold">إجمالي المردود:</span>
-                    <span id="returnTotalLbl" class="text-xl font-mono text-indigo-400 font-extrabold">-</span>
-                </div>
-            </div>
-
-            <div id="statusMsg" class="h-4 text-center text-xs font-medium opacity-0 transition-opacity"></div>
         </div>
     </div>
 
-    <!-- Modern Error Modal -->
+    <!-- 2. Products Return Calculator Tool -->
+    <div id="returnTab" class="tool-tab w-full max-w-lg app-container rounded-3xl shadow-2xl overflow-hidden hidden">
+        <div class="bg-gradient-to-br from-indigo-600 to-blue-700 p-8 text-center">
+            <h2 class="text-3xl font-extrabold text-white">حاسبة المردود</h2>
+            <p class="text-indigo-100 text-sm mt-2 opacity-80">نظام إدارة المرتجعات والهدايا</p>
+        </div>
+        <div class="p-8 space-y-6">
+            <div class="grid grid-cols-1 gap-5">
+                <div class="group">
+                    <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">عدد القطع المدفوعة</label>
+                    <input type="number" id="paidInput" placeholder="أدخل العدد هنا..." class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                </div>
+                <div class="group">
+                    <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">عدد الهدايا (مجانية)</label>
+                    <input type="number" id="giftInput" placeholder="أدخل العدد هنا..." class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                </div>
+                <div class="group">
+                    <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">كمية المردود (المرتجع)</label>
+                    <input type="number" id="returnQtyInput" placeholder="أدخل الكمية المرتجعة..." class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                </div>
+                <div class="group">
+                    <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">سعر المنتج (للكارتونة)</label>
+                    <input type="number" step="any" id="priceInput" placeholder="أدخل السعر..." class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-mono">
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                <button onclick="calculateReturn()" class="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-500/20">احسب الآن</button>
+                <button onclick="clearReturn()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold py-4 rounded-xl transition-all">مسح</button>
+            </div>
+
+            <div class="bg-black/30 rounded-2xl p-6 border border-slate-700/50 space-y-4">
+                <h3 class="text-sm font-bold text-slate-400 border-b border-slate-700/50 pb-2 flex items-center gap-2">
+                    <span class="w-1.5 h-4 bg-indigo-500 rounded-full"></span> النتائج التفصيلية
+                </h3>
+                <div class="flex justify-between items-center"><span class="text-slate-400">سعر المنتج الفعلي:</span><span id="piecePriceLbl" class="text-xl font-mono text-white">-</span></div>
+                <div class="flex justify-between items-center"><span class="text-slate-400">القطع المدفوعة في المردود:</span><span id="paidInReturnLbl" class="text-xl font-mono text-emerald-400 font-bold">-</span></div>
+                <div class="flex justify-between items-center"><span class="text-slate-400">القطع المجانية في المردود:</span><span id="freeInReturnLbl" class="text-xl font-mono text-amber-500 font-bold">-</span></div>
+                <div class="flex justify-between items-center pt-2 border-t border-slate-700/50"><span class="text-slate-300 font-bold">إجمالي المردود:</span><span id="returnTotalLbl" class="text-xl font-mono text-indigo-400 font-extrabold">-</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
     <div id="errorModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-6 z-50">
         <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-xs w-full text-center shadow-2xl">
             <div class="text-rose-500 text-5xl mb-4">⚠️</div>
@@ -117,24 +139,64 @@
     </div>
 
     <script>
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tool-tab').forEach(t => t.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('active', 'text-white');
+                b.classList.add('text-slate-400');
+            });
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('active', 'text-white');
+            activeBtn.classList.remove('text-slate-400');
+        }
+
+        // Error Handling
         function showError(msg) {
             document.getElementById('errorText').innerText = msg;
             document.getElementById('errorModal').style.display = 'flex';
         }
-
         function hideError() {
             document.getElementById('errorModal').style.display = 'none';
         }
 
-        function showStatus(msg, isError = false) {
-            const status = document.getElementById('statusMsg');
-            status.innerText = msg;
-            status.className = `text-center text-xs font-medium transition-opacity duration-300 ${isError ? 'text-rose-400' : 'text-emerald-400'}`;
-            status.style.opacity = '1';
-            setTimeout(() => { status.style.opacity = '0'; }, 3000);
+        // --- CAKE CALCULATOR LOGIC ---
+        const CAKE_BOX_SIZE = 12;
+        const CAKE_PACKAGE_SIZE = 8;
+        const CAKE_TOTAL_PER_PACKAGE = 96;
+
+        function calculateCake() {
+            const input = document.getElementById('cakeInput');
+            const total = parseInt(input.value);
+
+            if (isNaN(total) || total < 0) {
+                showError("الرجاء إدخال عدد صحيح موجب لقطع الكيك.");
+                return;
+            }
+
+            const totalBoxes = Math.floor(total / CAKE_BOX_SIZE);
+            const pieces = total % CAKE_BOX_SIZE;
+            const packages = Math.floor(totalBoxes / CAKE_PACKAGE_SIZE);
+            const remainingBoxes = totalBoxes % CAKE_PACKAGE_SIZE;
+            const decimalVal = total / CAKE_TOTAL_PER_PACKAGE;
+
+            document.getElementById('cakePackageVal').innerText = packages;
+            document.getElementById('cakeBoxVal').innerText = remainingBoxes;
+            document.getElementById('cakePieceVal').innerText = pieces;
+
+            const container = document.getElementById('cakeDecimalContainer');
+            if (pieces > 0) {
+                document.getElementById('cakeDecimalVal').innerText = decimalVal.toFixed(6).replace(/\.?0+$/, "");
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
         }
 
-        function calculate() {
+        // --- RETURN CALCULATOR LOGIC ---
+        function calculateReturn() {
             const pVal = document.getElementById('paidInput').value;
             const gVal = document.getElementById('giftInput').value;
             const rVal = document.getElementById('returnQtyInput').value;
@@ -161,46 +223,33 @@
                 return;
             }
 
-            // High Precision Calculation Logic
-            // Step 1: Effective Price per piece including free gifts
             const piecePrice = (paid * price) / totalUnits;
-            
-            // Step 2: Calculate how much of the returned quantity was "paid for"
             const paidInReturnRaw = (piecePrice * returnedQty) / price;
-            
-            // Step 3: Rounding logic (equivalent to ROUND_HALF_UP)
             let paidInReturn = Math.round(paidInReturnRaw);
 
-            // Bounds checking
             if (paidInReturn > returnedQty) paidInReturn = returnedQty;
             if (paidInReturn < 0) paidInReturn = 0;
 
             const freeInReturn = returnedQty - paidInReturn;
 
-            // Formatting price to display clean numbers
-            const formattedPrice = Number(piecePrice.toFixed(4)).toString();
-
-            // Display
-            document.getElementById('piecePriceLbl').innerText = formattedPrice;
+            document.getElementById('piecePriceLbl').innerText = Number(piecePrice.toFixed(4)).toString();
             document.getElementById('paidInReturnLbl').innerText = paidInReturn;
             document.getElementById('freeInReturnLbl').innerText = freeInReturn;
             document.getElementById('returnTotalLbl').innerText = returnedQty;
-
-            showStatus("تمت العملية بنجاح");
         }
 
-        function clearAll() {
+        function clearReturn() {
             ['paidInput', 'giftInput', 'returnQtyInput', 'priceInput'].forEach(id => {
                 document.getElementById(id).value = '';
             });
-            
             document.getElementById('piecePriceLbl').innerText = '-';
             document.getElementById('paidInReturnLbl').innerText = '-';
             document.getElementById('freeInReturnLbl').innerText = '-';
             document.getElementById('returnTotalLbl').innerText = '-';
-            
-            showStatus("تمت إعادة التعيين");
         }
+
+        // Support Enter key for both tools
+        document.getElementById('cakeInput').addEventListener('keypress', e => { if(e.key==='Enter') calculateCake(); });
     </script>
 </body>
 </html>
