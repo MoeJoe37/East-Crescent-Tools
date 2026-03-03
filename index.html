@@ -55,15 +55,15 @@
         <button onclick="switchTab('returnTab')" id="btn-returnTab" class="nav-btn flex-1 py-3 rounded-xl font-bold transition-all text-sm text-slate-400 hover:text-white" data-en="Return Calculator" data-ar="حاسبة المردود">حاسبة المردود</button>
     </div>
 
-    <!-- 1. Cake Converter Tool (Modified as requested) -->
+    <!-- 1. Cake Converter Tool -->
     <div id="cakeTab" class="tool-tab w-full max-w-lg app-container rounded-3xl shadow-2xl overflow-hidden">
         <div class="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 text-center">
             <h2 class="text-3xl font-extrabold text-white" data-en="Cake Converter" data-ar="حاسبة الكيك">حاسبة الكيك</h2>
-            <p class="text-blue-100 text-sm mt-2 opacity-80" data-en="Convert distribution to decimal packages" data-ar="تحويل التوزيع إلى إجمالي طرود (عشري)">تحويل التوزيع إلى إجمالي طرود (عشري)</p>
+            <p class="text-blue-100 text-sm mt-2 opacity-80" data-en="Convert distribution to units" data-ar="تحويل التوزيع إلى وحدات">تحويل التوزيع إلى وحدات</p>
         </div>
         <div class="p-8 space-y-6">
             
-            <!-- Three Entry Fields -->
+            <!-- Three Entry Fields (New Input Method) -->
             <div class="grid grid-cols-3 gap-3">
                 <div>
                     <label class="block text-[10px] font-bold text-blue-400 uppercase mb-2" data-en="Packages" data-ar="طرود">طرود</label>
@@ -81,10 +81,21 @@
 
             <button onclick="calculateCake()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-500/20" data-en="Calculate Total" data-ar="احسب الإجمالي">احسب الإجمالي</button>
             
-            <!-- Result Display -->
-            <div id="cakeResultContainer" class="bg-indigo-900/40 p-6 rounded-2xl border border-indigo-500/30 text-center">
-                <p class="text-[10px] text-indigo-300 font-bold uppercase tracking-widest mb-2" data-en="Total Packages (Decimal View)" data-ar="إجمالي الطرود (بالفواصل)">إجمالي الطرود (بالفواصل)</p>
-                <p id="cakeDecimalVal" class="text-4xl font-mono font-bold text-white">0</p>
+            <!-- Result Display (Old Output Method) -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-700 text-center">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1" data-en="Decimal Value" data-ar="القيمة العشرية">القيمة العشرية</p>
+                    <p id="cakeDecimalVal" class="text-2xl font-mono font-bold text-white">0</p>
+                </div>
+                <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-700 text-center">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1" data-en="Total Pieces" data-ar="إجمالي القطع">إجمالي القطع</p>
+                    <p id="cakeTotalPcs" class="text-2xl font-mono font-bold text-blue-400">0</p>
+                </div>
+            </div>
+
+            <div id="cakeDetailedResult" class="bg-indigo-900/40 p-6 rounded-2xl border border-indigo-500/30 text-center">
+                <p class="text-[10px] text-indigo-300 font-bold uppercase tracking-widest mb-2" data-en="Package Breakdown" data-ar="تفصيل الطرود">تفصيل الطرود</p>
+                <p id="cakeFormatVal" class="text-2xl font-bold text-white">-</p>
             </div>
 
             <button onclick="clearCake()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold py-2 rounded-lg text-xs transition-all" data-en="Clear All" data-ar="مسح البيانات">مسح البيانات</button>
@@ -187,7 +198,7 @@
             document.getElementById('errorModal').style.display = 'none';
         }
 
-        // --- UPDATED CAKE CALCULATOR LOGIC ---
+        // --- CAKE CALCULATOR LOGIC ---
         const BOXES_PER_PACKAGE = 8;
         const PCS_PER_BOX = 12;
         const TOTAL_PCS_PER_PACKAGE = BOXES_PER_PACKAGE * PCS_PER_BOX; // 96
@@ -202,13 +213,27 @@
                 return;
             }
 
-            // Calculation: Pkg + (Boxes/8) + (Pcs/96)
-            const boxInPkg = box / BOXES_PER_PACKAGE;
-            const pcsInPkg = pcs / TOTAL_PCS_PER_PACKAGE;
-            const totalDecimal = pkg + boxInPkg + pcsInPkg;
+            // Total pieces calculation
+            const totalPcs = (pkg * TOTAL_PCS_PER_PACKAGE) + (box * PCS_PER_BOX) + pcs;
+            
+            // Decimal calculation
+            const totalDecimal = totalPcs / TOTAL_PCS_PER_PACKAGE;
 
-            // Display result formatted to max 4 decimal places
+            // Breakdown calculation (Output logic)
+            const resPkg = Math.floor(totalPcs / TOTAL_PCS_PER_PACKAGE);
+            const remainingPcsAfterPkg = totalPcs % TOTAL_PCS_PER_PACKAGE;
+            const resBox = Math.floor(remainingPcsAfterPkg / PCS_PER_BOX);
+            const resPcs = remainingPcsAfterPkg % PCS_PER_BOX;
+
+            // Update UI
             document.getElementById('cakeDecimalVal').innerText = Number(totalDecimal.toFixed(4)).toString();
+            document.getElementById('cakeTotalPcs').innerText = totalPcs;
+            
+            const formatStr = currentLang === 'ar' 
+                ? `${resPkg} طرد - ${resBox} كرتونة - ${resPcs} قطعة`
+                : `${resPkg} Pkg - ${resBox} Box - ${resPcs} Pcs`;
+            
+            document.getElementById('cakeFormatVal').innerText = formatStr;
         }
 
         function clearCake() {
@@ -216,6 +241,8 @@
             document.getElementById('inputBox').value = '';
             document.getElementById('inputPcs').value = '';
             document.getElementById('cakeDecimalVal').innerText = '0';
+            document.getElementById('cakeTotalPcs').innerText = '0';
+            document.getElementById('cakeFormatVal').innerText = '-';
         }
 
         // --- RETURN CALCULATOR LOGIC ---
