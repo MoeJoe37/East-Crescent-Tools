@@ -55,39 +55,39 @@
         <button onclick="switchTab('returnTab')" id="btn-returnTab" class="nav-btn flex-1 py-3 rounded-xl font-bold transition-all text-sm text-slate-400 hover:text-white" data-en="Return Calculator" data-ar="حاسبة المردود">حاسبة المردود</button>
     </div>
 
-    <!-- 1. Cake Converter Tool -->
+    <!-- 1. Cake Converter Tool (Modified as requested) -->
     <div id="cakeTab" class="tool-tab w-full max-w-lg app-container rounded-3xl shadow-2xl overflow-hidden">
         <div class="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 text-center">
             <h2 class="text-3xl font-extrabold text-white" data-en="Cake Converter" data-ar="حاسبة الكيك">حاسبة الكيك</h2>
-            <p class="text-blue-100 text-sm mt-2 opacity-80" data-en="Convert total units to packages and boxes" data-ar="تحويل العدد الإجمالي إلى طرود وكواتين">تحويل العدد الإجمالي إلى طرود وكواتين</p>
+            <p class="text-blue-100 text-sm mt-2 opacity-80" data-en="Convert distribution to decimal packages" data-ar="تحويل التوزيع إلى إجمالي طرود (عشري)">تحويل التوزيع إلى إجمالي طرود (عشري)</p>
         </div>
         <div class="p-8 space-y-6">
-            <div class="space-y-2">
-                <label class="block text-xs font-bold text-blue-400 uppercase tracking-wider mb-2" data-en="Total Cake Pieces:" data-ar="إجمالي عدد قطع الكيك:">إجمالي عدد قطع الكيك:</label>
-                <input type="number" id="cakeInput" placeholder="أدخل العدد هنا..." data-placeholder-en="Enter quantity..." data-placeholder-ar="أدخل العدد هنا..."
-                       class="cake-input w-full p-4 rounded-xl border-none text-lg font-bold outline-none focus:ring-4 focus:ring-blue-500/30">
-            </div>
-            <button onclick="calculateCake()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-500/20" data-en="Calculate Distribution" data-ar="احسب التوزيع">احسب التوزيع</button>
             
+            <!-- Three Entry Fields -->
             <div class="grid grid-cols-3 gap-3">
-                <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-700 text-center">
-                    <div id="cakePackageVal" class="text-2xl font-bold text-blue-400">0</div>
-                    <div class="text-[10px] text-slate-500 font-bold uppercase mt-1" data-en="Package (8 boxes)" data-ar="طرد (8 كرتونة)">طرد (8 كرتونة)</div>
+                <div>
+                    <label class="block text-[10px] font-bold text-blue-400 uppercase mb-2" data-en="Packages" data-ar="طرود">طرود</label>
+                    <input type="number" id="inputPkg" placeholder="0" class="cake-input w-full p-4 rounded-xl border-none text-lg font-bold outline-none focus:ring-4 focus:ring-blue-500/30 text-center">
                 </div>
-                <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-700 text-center">
-                    <div id="cakeBoxVal" class="text-2xl font-bold text-blue-400">0</div>
-                    <div class="text-[10px] text-slate-500 font-bold uppercase mt-1" data-en="Box (12 pcs)" data-ar="كرتونة (12 قطعة)">كرتونة (12 قطعة)</div>
+                <div>
+                    <label class="block text-[10px] font-bold text-blue-400 uppercase mb-2" data-en="Boxes" data-ar="كرتونة">كرتونة</label>
+                    <input type="number" id="inputBox" placeholder="0" class="cake-input w-full p-4 rounded-xl border-none text-lg font-bold outline-none focus:ring-4 focus:ring-blue-500/30 text-center">
                 </div>
-                <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-700 text-center">
-                    <div id="cakePieceVal" class="text-2xl font-bold text-blue-400">0</div>
-                    <div class="text-[10px] text-slate-500 font-bold uppercase mt-1" data-en="Remaining Pcs" data-ar="قطع متبقية">قطع متبقية</div>
+                <div>
+                    <label class="block text-[10px] font-bold text-blue-400 uppercase mb-2" data-en="Pieces" data-ar="قطعة">قطعة</label>
+                    <input type="number" id="inputPcs" placeholder="0" class="cake-input w-full p-4 rounded-xl border-none text-lg font-bold outline-none focus:ring-4 focus:ring-blue-500/30 text-center">
                 </div>
             </div>
 
-            <div id="cakeDecimalContainer" class="bg-indigo-900/30 p-4 rounded-2xl border border-indigo-800/50 hidden">
-                <p class="text-center text-[10px] text-indigo-300 font-bold uppercase tracking-widest mb-1" data-en="Total Packages (Decimal View)" data-ar="إجمالي الطرود (عرض عشري)">إجمالي الطرود (عرض عشري)</p>
-                <p id="cakeDecimalVal" class="text-center text-xl font-mono font-bold text-indigo-400">0.0</p>
+            <button onclick="calculateCake()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-500/20" data-en="Calculate Total" data-ar="احسب الإجمالي">احسب الإجمالي</button>
+            
+            <!-- Result Display -->
+            <div id="cakeResultContainer" class="bg-indigo-900/40 p-6 rounded-2xl border border-indigo-500/30 text-center">
+                <p class="text-[10px] text-indigo-300 font-bold uppercase tracking-widest mb-2" data-en="Total Packages (Decimal View)" data-ar="إجمالي الطرود (بالفواصل)">إجمالي الطرود (بالفواصل)</p>
+                <p id="cakeDecimalVal" class="text-4xl font-mono font-bold text-white">0</p>
             </div>
+
+            <button onclick="clearCake()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold py-2 rounded-lg text-xs transition-all" data-en="Clear All" data-ar="مسح البيانات">مسح البيانات</button>
         </div>
     </div>
 
@@ -153,16 +153,12 @@
             document.documentElement.lang = currentLang;
             document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
             
-            // Toggle body class for alignment if needed
-            document.body.style.textAlign = currentLang === 'ar' ? 'right' : 'left';
             document.getElementById('header-text').style.textAlign = currentLang === 'ar' ? 'right' : 'left';
             
-            // Update all elements with data attributes
             document.querySelectorAll('[data-en]').forEach(el => {
                 el.innerText = el.getAttribute(`data-${currentLang}`);
             });
 
-            // Update placeholders
             document.querySelectorAll('[data-placeholder-en]').forEach(el => {
                 el.placeholder = el.getAttribute(`data-placeholder-${currentLang}`);
             });
@@ -170,7 +166,6 @@
             document.getElementById('lang-toggle').innerText = currentLang === 'ar' ? 'English' : 'العربية';
         }
 
-        // Tab Switching Logic
         function switchTab(tabId) {
             document.querySelectorAll('.tool-tab').forEach(t => t.classList.add('hidden'));
             document.getElementById(tabId).classList.remove('hidden');
@@ -184,7 +179,6 @@
             activeBtn.classList.remove('text-slate-400');
         }
 
-        // Error Handling
         function showError(arMsg, enMsg) {
             document.getElementById('errorText').innerText = currentLang === 'ar' ? arMsg : enMsg;
             document.getElementById('errorModal').style.display = 'flex';
@@ -193,37 +187,35 @@
             document.getElementById('errorModal').style.display = 'none';
         }
 
-        // --- CAKE CALCULATOR LOGIC ---
-        const CAKE_BOX_SIZE = 12;
-        const CAKE_PACKAGE_SIZE = 8;
-        const CAKE_TOTAL_PER_PACKAGE = 96;
+        // --- UPDATED CAKE CALCULATOR LOGIC ---
+        const BOXES_PER_PACKAGE = 8;
+        const PCS_PER_BOX = 12;
+        const TOTAL_PCS_PER_PACKAGE = BOXES_PER_PACKAGE * PCS_PER_BOX; // 96
 
         function calculateCake() {
-            const input = document.getElementById('cakeInput');
-            const total = parseInt(input.value);
+            const pkg = parseFloat(document.getElementById('inputPkg').value) || 0;
+            const box = parseFloat(document.getElementById('inputBox').value) || 0;
+            const pcs = parseFloat(document.getElementById('inputPcs').value) || 0;
 
-            if (isNaN(total) || total < 0) {
-                showError("الرجاء إدخال عدد صحيح موجب لقطع الكيك.", "Please enter a positive integer for cake pieces.");
+            if (pkg < 0 || box < 0 || pcs < 0) {
+                showError("يرجى إدخال قيم موجبة.", "Please enter positive values.");
                 return;
             }
 
-            const totalBoxes = Math.floor(total / CAKE_BOX_SIZE);
-            const pieces = total % CAKE_BOX_SIZE;
-            const packages = Math.floor(totalBoxes / CAKE_PACKAGE_SIZE);
-            const remainingBoxes = totalBoxes % CAKE_PACKAGE_SIZE;
-            const decimalVal = total / CAKE_TOTAL_PER_PACKAGE;
+            // Calculation: Pkg + (Boxes/8) + (Pcs/96)
+            const boxInPkg = box / BOXES_PER_PACKAGE;
+            const pcsInPkg = pcs / TOTAL_PCS_PER_PACKAGE;
+            const totalDecimal = pkg + boxInPkg + pcsInPkg;
 
-            document.getElementById('cakePackageVal').innerText = packages;
-            document.getElementById('cakeBoxVal').innerText = remainingBoxes;
-            document.getElementById('cakePieceVal').innerText = pieces;
+            // Display result formatted to max 4 decimal places
+            document.getElementById('cakeDecimalVal').innerText = Number(totalDecimal.toFixed(4)).toString();
+        }
 
-            const container = document.getElementById('cakeDecimalContainer');
-            if (pieces > 0) {
-                document.getElementById('cakeDecimalVal').innerText = decimalVal.toFixed(6).replace(/\.?0+$/, "");
-                container.classList.remove('hidden');
-            } else {
-                container.classList.add('hidden');
-            }
+        function clearCake() {
+            document.getElementById('inputPkg').value = '';
+            document.getElementById('inputBox').value = '';
+            document.getElementById('inputPcs').value = '';
+            document.getElementById('cakeDecimalVal').innerText = '0';
         }
 
         // --- RETURN CALCULATOR LOGIC ---
@@ -278,8 +270,6 @@
             document.getElementById('freeInReturnLbl').innerText = '-';
             document.getElementById('returnTotalLbl').innerText = '-';
         }
-
-        document.getElementById('cakeInput').addEventListener('keypress', e => { if(e.key==='Enter') calculateCake(); });
     </script>
 </body>
 </html>
